@@ -3,12 +3,14 @@ import React from 'react';
 const Answers = (props) => {
   return (
     <div className="answer-container">
-      {props.answers.map((item) => {
+      {props.answers.map(item => {
         return (
           <div
-            key={item.id}
+            key={item.letter}
             className={`answer ${props.activeChoice && 'answer-disabled'} ${props.activeChoice && props.activeChoice !== item.letter && 'answer-opaque'}`}
-            onClick={() => {props.pickAnswer(item.letter)}}>
+            onClick={() => {
+              props.pickAnswer(props.id, item.letter)
+            }}>
             <span className="big-letter">
               {item.letter}
               </span>

@@ -5,6 +5,7 @@
 
 .App-header {
     width: 95%;
+    height: 98vh;
     margin: 0 auto;
     /*!*background-color: #282c34;*!*/
     /*min-height: 100vh;*/
@@ -15,12 +16,20 @@
     /*font-size: calc(10px + 2vmin);*/
     /*color: black*/
 }
+.timer-container {
+    position: absolute;
+    right: 9%;
+    top: 6%;
+    font-size: 2rem;
+}
 .question {
-    font-size: 200%;
+    font-size: 1.5rem;
     max-width: 80%;
     letter-spacing: -1.7px;
+    height: 27%;
 }
 .bar-container {
+    height: 30%;
     opacity: 0;
     display: flex;
     justify-content: flex-end;
