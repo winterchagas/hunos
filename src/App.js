@@ -22,16 +22,15 @@ class App extends Component {
       gameFinished: false,
       answers: {},
       timeDisplay: 10,
-      isHost: false
+      isHost: false,
+      userError: ''
     };
 
     this.currentQuestionIndex = 0;
-    this.userError = '';
 
     this.setNextQuestion = this.setNextQuestion.bind(this);
     this.pickAnswer = this.pickAnswer.bind(this);
     this.submitName = this.submitName.bind(this);
-    this.changeTimeDisplay = this.changeTimeDisplay.bind(this);
     this.finishGame = this.finishGame.bind(this);
     this.startGame = this.startGame.bind(this);
   }
@@ -54,12 +53,15 @@ class App extends Component {
   }
 
   startGame() {
+    console.log('start game called');
     socket.emit('startGame');
   }
 
   finishGame() {
-    // todo emit event to grab the rankings
-    this.setState(() => ({gameFinished: true}));
+    socket.emit('finishGame', (rankings) => {
+      // this.rankings = this.sortRankings(rankings);
+      this.setState(() => ({gameFinished: true}));
+    });
   }
 
   setNextQuestion() {
@@ -72,25 +74,26 @@ class App extends Component {
 
   pickAnswer(questionId, choice) {
     console.log('EMITING PICK', questionId, choice);
-    socket.emit('pick', {questionId, choice});
+    socket.emit('pick', {questionId, choice, user: this.user});
     this.setState(() => ({activeChoice: choice}));
   }
 
   submitName(e) {
     e.preventDefault();
-    if (e.target[0].value === 'leohost123') {
-      this.setState(() => ({isHost: true}));
-      return;
-    }
     socket.emit('join',
       e.target[0].value,
-      (ok, error) => {
+      (ok, response) => {
         if (ok) {
+          if(!response) {
+            this.setState(() => ({isHost: true}));
+            return;
+          }
+          this.user = response;
           this.setState(() => ({loggedIn: true}));
           return;
         }
-        console.log('ERROR', error);
-        this.userError = error;
+        console.log('ERROR', response);
+        this.setState(() => ({userError: response}));
       });
   }
 
@@ -99,9 +102,9 @@ class App extends Component {
     if (this.state.isHost) {
       app = <HostPage startGame={this.startGame}/>
     } else {
-      if (this.state.gameInitiated) {
+      if (this.state.gameStarted) {
         if (this.state.gameFinished) {
-          app = <Ranking/>
+          app = <Ranking ranking={this.rankings}/>
         } else {
           app = <div className="App">
             <header className="App-header">
@@ -112,7 +115,6 @@ class App extends Component {
                 totalQuestions={questions.length}
                 setNextQuestion={this.setNextQuestion}
                 time={this.state.timeDisplay}
-                changeTimeDisplay={this.changeTimeDisplay}
                 finishGame={this.finishGame}
               />
               <Bar
@@ -130,7 +132,11 @@ class App extends Component {
         }
       }
       else {
-        app = <LoadPage error={this.userError} submit={this.submitName}/>;
+        app = <LoadPage
+          error={this.state.userError}
+          submit={this.submitName}
+          loggedIn={this.state.loggedIn}
+        />;
       }
     }
     return app;

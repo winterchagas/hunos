@@ -20,26 +20,54 @@ console.log(publicPath);
 
 app.use(express.static(publicPath));
 
+let gameStarted = false;
+
 io.on('connection', (socket) => {
   console.log('New user connected');
 
   socket.on('join', (userName, callback) => {
-    const userAdded = users.addUser(userName);
-    if (userAdded) {
+    if (userName === 'leohost' ||
+        userName === 'erichost123' ||
+        userName === 'yinanhost123'
+    ) {
       callback(true);
-      return;
     }
-    callback(false, 'User name already exists');
-  });
+    if (!gameStarted) {
+      const userAdded = users.addUser(userName);
+      if (userAdded) {
+        callback(true, userAdded);
+        return;
+      }
+      callback(false, 'User name already exists');
+    } else {
+      callback(false, 'Game already started =/');
+    }
 
-  socket.on('pick', ({questionId, choice}) => {
-    console.log('answer received', questionId, choice);
-    const updatedAnswers = answers.addAnswer(questionId, choice);
-    io.emit('newAnswer', updatedAnswers);
   });
 
   socket.on('startGame', () => {
+    console.log('startGame');
+    gameStarted = true;
     io.emit('gameStarted');
+  });
+
+  socket.on('pick', ({questionId, choice, user}) => {
+    console.log('answer received', questionId, choice);
+    const updatedAnswers = answers.addAnswer(questionId, choice);
+    io.emit('newAnswer', updatedAnswers);
+    rankings.addRanking(questionId, choice, user)
+  });
+
+  socket.on('finishGame', (callback) => {
+    console.log('finishGame');
+    const finalRanking = rankings.getRanking();
+    if (finalRanking) {
+      callback(true, finalRanking);
+    } else {
+      callback(false, 'Error getting final rankings');
+    }
+    gameStarted = false;
+    // todo perform clean up
   });
 
 });

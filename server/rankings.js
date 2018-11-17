@@ -1,15 +1,33 @@
+const {correctAnswers} = require('./correctAnswers');
+
 class Rankings {
   constructor() {
-    this.rankings = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []}
+    this.rankings = {}
   }
 
-  addRanking(id, questionNumber) {
-    this.rankings[questionNumber].push(id);
-    console.log('RANK ADDED', id, this.rankings);
+  addRanking(questionId, choice, user) {
+    console.log(`${correctAnswers[questionId].toLowerCase() === choice.toLowerCase() ? 'RIGHT' : 'WRONG'}`);
+    if (correctAnswers[questionId].toLowerCase() === choice.toLowerCase()) {
+      if (!this.rankings[questionId]) {
+        this.rankings[questionId] = [];
+      }
+      const time = this.getTime();
+      this.rankings[questionId].push({user: user.name, time});
+    }
+  }
+
+  getTime() {
+    const now = (Date.now() / 10000).toString();
+    const nowSliced = now.substr(now.indexOf('.') - 4);
+    console.log('TIME', parseFloat(nowSliced));
+    return parseFloat(nowSliced);
   }
 
   getRanking() {
-    return this.rankings;
+    console.log('FINAL RANKINGS');
+    for (let o of this.rankings) {
+      console.log(o);
+    }
   }
 }
 
