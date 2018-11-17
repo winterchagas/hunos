@@ -58,14 +58,17 @@ io.on('connection', (socket) => {
     rankings.addRanking(questionId, choice, user)
   });
 
-  socket.on('finishGame', (callback) => {
-    console.log('finishGame');
+  socket.on('getRankings', (callback) => {
+    console.log('getRankings');
     const finalRanking = rankings.getRanking();
     if (finalRanking) {
       callback(true, finalRanking);
     } else {
       callback(false, 'Error getting final rankings');
     }
+  });
+
+  socket.on('finishGame', () => {
     gameStarted = false;
     // todo perform clean up
   });

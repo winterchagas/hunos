@@ -25,9 +25,7 @@ class Rankings {
 
   getRanking() {
     console.log('FINAL RANKINGS');
-    for (let o of this.rankings) {
-      console.log(o);
-    }
+    return this.rankings;
   }
 }
 

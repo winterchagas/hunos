@@ -37,10 +37,8 @@ class App extends Component {
 
   componentDidMount() {
     socket.on('connect', function () {
-      console.log('CLIENT CONNECTED');
     });
     socket.on('newAnswer', (answers) => {
-      console.log('NEW ANSWER ARRAY RECEIVED', answers);
       if (answers) {
         this.setState({answers});
       }
@@ -53,15 +51,35 @@ class App extends Component {
   }
 
   startGame() {
-    console.log('start game called');
     socket.emit('startGame');
   }
 
-  finishGame() {
-    socket.emit('finishGame', (rankings) => {
-      // this.rankings = this.sortRankings(rankings);
+  getRankings() {
+    socket.emit('getRankings', (rankings) => {
+      const reducedRanking = this.reduceRankings(rankings);
+      this.rankings = this.sortRankings(reducedRanking);
       this.setState(() => ({gameFinished: true}));
     });
+  }
+
+  reduceRankings(ranking) {
+    let rankingReduced = {};
+    for (let value of Object.values(ranking)) {
+      for (let innerValue of value) {
+        if (!rankingReduced[innerValue.user]) {
+          rankingReduced[innerValue.user] = {count: 1, sum: innerValue.time};
+        } else {
+          rankingReduced[innerValue.user].count++;
+          rankingReduced[innerValue.user].sum += innerValue.time
+        }
+      }
+    }
+    console.log('rankingReduced', rankingReduced);
+    return rankingReduced;
+  }
+
+  sortRankings(ranking) {
+
   }
 
   setNextQuestion() {
@@ -73,7 +91,6 @@ class App extends Component {
   }
 
   pickAnswer(questionId, choice) {
-    console.log('EMITING PICK', questionId, choice);
     socket.emit('pick', {questionId, choice, user: this.user});
     this.setState(() => ({activeChoice: choice}));
   }
@@ -115,7 +132,7 @@ class App extends Component {
                 totalQuestions={questions.length}
                 setNextQuestion={this.setNextQuestion}
                 time={this.state.timeDisplay}
-                finishGame={this.finishGame}
+                getRankings={this.getRankings}
               />
               <Bar
                 activeChoice={this.state.activeChoice}

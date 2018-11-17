@@ -3,7 +3,6 @@ import React from 'react';
 let loadPage;
 
 const LoadPage = (props) => {
-  console.log('loadprops', props);
   if (props.loggedIn) {
     loadPage = <h1>Waiting for other players..</h1>
   } else {
