@@ -31,8 +31,9 @@ class App extends Component {
     this.setNextQuestion = this.setNextQuestion.bind(this);
     this.pickAnswer = this.pickAnswer.bind(this);
     this.submitName = this.submitName.bind(this);
-    this.finishGame = this.finishGame.bind(this);
+    // this.finishGame = this.finishGame.bind(this);
     this.startGame = this.startGame.bind(this);
+    this.getRankings = this.getRankings.bind(this);
   }
 
   componentDidMount() {
@@ -55,10 +56,16 @@ class App extends Component {
   }
 
   getRankings() {
-    socket.emit('getRankings', (rankings) => {
-      const reducedRanking = this.reduceRankings(rankings);
-      this.rankings = this.sortRankings(reducedRanking);
-      this.setState(() => ({gameFinished: true}));
+    socket.emit('getRankings', (ok, rankings) => {
+      if (ok) {
+        console.log('GOT RANKINGS', rankings);
+        const reducedRanking = this.reduceRankings(rankings);
+        const rankingInArray = this.tranformInArray(reducedRanking);
+        this.rankings = this.sortRankings(rankingInArray);
+        this.setState(() => ({gameFinished: true}));
+      } else {
+        // todo? generate error
+      }
     });
   }
 
@@ -78,8 +85,22 @@ class App extends Component {
     return rankingReduced;
   }
 
-  sortRankings(ranking) {
+  tranformInArray(ranking) {
+    const rankingArray = [];
+    for (let entry in ranking) {
+      rankingArray.push([entry, ranking[entry].count, ranking[entry].sum]);
+    }
+    console.log('RANKING ARRAY', rankingArray)
+  }
 
+  sortRankings(ranking) {
+    ranking.sort((a, b) => {
+      if (a[1] === b[1]) {
+        return a[2] - b[2];
+      }
+      return a[1] - b[1];
+    });
+    return ranking;
   }
 
   setNextQuestion() {
@@ -101,7 +122,7 @@ class App extends Component {
       e.target[0].value,
       (ok, response) => {
         if (ok) {
-          if(!response) {
+          if (!response) {
             this.setState(() => ({isHost: true}));
             return;
           }

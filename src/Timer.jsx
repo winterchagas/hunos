@@ -4,7 +4,7 @@ class Timer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timeDisplay: 5
+      timeDisplay: 3
     };
     this.questionNumber = 0;
   }
@@ -18,7 +18,7 @@ class Timer extends Component {
           clearTimeout(timeOut);
         } else {
           this.props.setNextQuestion();
-          this.setState(() => ({timeDisplay: 5}));
+          this.setState(() => ({timeDisplay: 3}));
           this.questionNumber++;
         }
       }

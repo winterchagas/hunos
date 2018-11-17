@@ -24,7 +24,7 @@ class Rankings {
   }
 
   getRanking() {
-    console.log('FINAL RANKINGS');
+    console.log('FINAL RANKINGS', this.rankings);
     return this.rankings;
   }
 }
