@@ -32,7 +32,7 @@ class App extends Component {
     this.setNextQuestion = this.setNextQuestion.bind(this);
     this.pickAnswer = this.pickAnswer.bind(this);
     this.submitName = this.submitName.bind(this);
-    // this.finishGame = this.finishGame.bind(this);
+    this.resetGame = this.resetGame.bind(this);
     this.startGame = this.startGame.bind(this);
     this.getRankings = this.getRankings.bind(this);
     this.showRightAnswer = this.showRightAnswer.bind(this);
@@ -55,6 +55,10 @@ class App extends Component {
 
   startGame() {
     socket.emit('startGame');
+  }
+
+  resetGame() {
+    socket.emit('resetGame');
   }
 
   getRankings() {
@@ -150,7 +154,10 @@ class App extends Component {
   render() {
     let app;
     if (this.state.isHost) {
-      app = <HostPage startGame={this.startGame}/>
+      app = <HostPage
+        resetGame={this.resetGame}
+        startGame={this.startGame}
+      />
     } else {
       if (this.state.gameStarted) {
         if (this.state.gameFinished) {

@@ -18,6 +18,10 @@ class Answers {
     }
     return this.answers[id];
   }
+
+  resetAnswers() {
+    this.answers = {}
+  }
 }
 
 module.exports = {Answers};

@@ -16,8 +16,9 @@ class Users {
     return user;
   }
 
-  getUserList() {
-    return this.users;
+  resetUsers() {
+    this.users = [];
+    this.id = 1;
   }
 }
 

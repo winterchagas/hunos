@@ -6,6 +6,9 @@ const HostPage = (props) => {
       <button onClick={props.startGame}>
         START
       </button>
+      <button onClick={props.resetGame}>
+        RESET
+      </button>
     </div>
   );
 }

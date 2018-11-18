@@ -70,9 +70,11 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('finishGame', () => {
+  socket.on('resetGame', () => {
+    users.resetUsers();
+    rankings.resetRankings();
+    answers.resetAnswers();
     gameStarted = false;
-    // todo perform clean up
   });
 
 });

@@ -27,6 +27,10 @@ class Rankings {
     console.log('FINAL RANKINGS', this.rankings);
     return this.rankings;
   }
+
+  resetRankings() {
+    this.answers = {}
+  }
 }
 
 module.exports = {Rankings};
