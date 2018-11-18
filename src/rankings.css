@@ -1,0 +1,73 @@
+.rankings-container {
+    margin: 120px 179px;
+}
+
+.content1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.img {
+    /*width: 32px;*/
+    height: 50px;
+}
+
+.name1 {
+    width: 135px;
+    font-size: 52px;
+    font-weight: 600;
+    letter-spacing: -1.7px;
+    text-align: right;
+    color: #000000;
+    margin-right: 20px;
+}
+
+.name2 {
+    width: 167px;
+    font-size: 35px;
+    font-weight: bold;
+    letter-spacing: -1.7px;
+    text-align: right;
+    color: #000000;
+    margin-right: 20px;
+
+}
+
+.rectangle {
+    width: 70%;
+    height: 15px;
+    border-radius: 7.5px;
+    background-color: #fea465;
+}
+
+.rectangle2 {
+    display: flex;
+    width: 800px;
+}
+
+.r1 {
+    height: 15px;
+    opacity: 0.1;
+    border-radius: 0px  7.5px 7.5px 0px;
+    background-color: #000000;
+}
+
+.r2 {
+    height: 15px;
+    border-radius: 7.5px  0px 0px 7.5px;
+    background-color: #fea465;
+}
+
+.ranking-correct-answers {
+    width: 72px;
+    font-size: 52px;
+    font-weight: 300;
+    text-align: center;
+    color: #000000;
+}
+
+.ranking-total-questions {
+    font-size: 24px;
+}

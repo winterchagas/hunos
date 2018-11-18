@@ -21,9 +21,10 @@ class App extends Component {
       gameStarted: false,
       gameFinished: false,
       answers: {},
-      timeDisplay: 10,
       isHost: false,
-      userError: ''
+      userError: '',
+      rightChoice: '',
+      seeRightAnswer: false
     };
 
     this.currentQuestionIndex = 0;
@@ -34,6 +35,7 @@ class App extends Component {
     // this.finishGame = this.finishGame.bind(this);
     this.startGame = this.startGame.bind(this);
     this.getRankings = this.getRankings.bind(this);
+    this.showRightAnswer = this.showRightAnswer.bind(this);
   }
 
   componentDidMount() {
@@ -90,30 +92,37 @@ class App extends Component {
     for (let entry in ranking) {
       rankingArray.push([entry, ranking[entry].count, ranking[entry].sum]);
     }
-    console.log('RANKING ARRAY', rankingArray)
+    console.log('RANKING ARRAY', rankingArray);
+    return rankingArray;
   }
 
   sortRankings(ranking) {
-    ranking.sort((a, b) => {
+    const sortedRanking = ranking.sort((a, b) => {
       if (a[1] === b[1]) {
         return a[2] - b[2];
+      } else if (a[1] < b[1]) {
+        return 1;
       }
-      return a[1] - b[1];
+      return -1;
     });
-    return ranking;
+    console.log('SORTED ARRAY', sortedRanking);
+    return sortedRanking;
   }
 
   setNextQuestion() {
     this.currentQuestionIndex = this.currentQuestionIndex + 1;
     this.setState(() => ({
       activeChoice: '',
-      answers: {}
+      rightChoice: '',
+      answers: {},
+      seeRightAnswer: false
     }));
   }
 
-  pickAnswer(questionId, choice) {
-    socket.emit('pick', {questionId, choice, user: this.user});
-    this.setState(() => ({activeChoice: choice}));
+  pickAnswer(questionId, activeChoice) {
+    socket.emit('pick', {questionId, activeChoice, user: this.user}, (rightChoice) => {
+      this.setState(() => ({activeChoice, rightChoice}));
+    });
   }
 
   submitName(e) {
@@ -135,6 +144,12 @@ class App extends Component {
       });
   }
 
+  showRightAnswer() {
+    this.setState(() => ({seeRightAnswer: true}));
+  }
+
+  // todo barra do timer
+
   render() {
     let app;
     if (this.state.isHost) {
@@ -142,7 +157,7 @@ class App extends Component {
     } else {
       if (this.state.gameStarted) {
         if (this.state.gameFinished) {
-          app = <Ranking ranking={this.rankings}/>
+          app = <Ranking rankings={this.rankings}/>
         } else {
           app = <div className="App">
             <header className="App-header">
@@ -152,6 +167,7 @@ class App extends Component {
               <Timer
                 totalQuestions={questions.length}
                 setNextQuestion={this.setNextQuestion}
+                showRightAnswer={this.showRightAnswer}
                 time={this.state.timeDisplay}
                 getRankings={this.getRankings}
               />
@@ -160,7 +176,9 @@ class App extends Component {
                 number={this.state.answers}
               />
               <Answers
+                seeRightAnswer={this.state.seeRightAnswer}
                 activeChoice={this.state.activeChoice}
+                rightChoice={this.state.rightChoice}
                 pickAnswer={this.pickAnswer}
                 answers={questions[this.currentQuestionIndex].answers}
                 id={questions[this.currentQuestionIndex].id}

@@ -8,6 +8,7 @@ const port = process.env.PORT || 4000;
 const {Users} = require('./users');
 const {Rankings} = require('./rankings');
 const {Answers} = require('./answers');
+const {correctAnswers} = require('./correctAnswers');
 
 const app = express();
 const server = http.createServer(app);
@@ -51,11 +52,12 @@ io.on('connection', (socket) => {
     io.emit('gameStarted');
   });
 
-  socket.on('pick', ({questionId, choice, user}) => {
-    console.log('answer received', questionId, choice);
-    const updatedAnswers = answers.addAnswer(questionId, choice);
+  socket.on('pick', ({questionId, activeChoice, user}, callback) => {
+    console.log('answer received', questionId, activeChoice);
+    const updatedAnswers = answers.addAnswer(questionId, activeChoice);
     io.emit('newAnswer', updatedAnswers);
-    rankings.addRanking(questionId, choice, user)
+    rankings.addRanking(questionId, activeChoice, user);
+    callback(correctAnswers[questionId]);
   });
 
   socket.on('getRankings', (callback) => {
