@@ -105,7 +105,6 @@ class App extends Component {
       }
       return -1;
     });
-    console.log('SORTED ARRAY', sortedRanking);
     return sortedRanking;
   }
 
@@ -147,7 +146,7 @@ class App extends Component {
   showRightAnswer() {
     this.setState(() => ({seeRightAnswer: true}));
   }
-  
+
   render() {
     let app;
     if (this.state.isHost) {
