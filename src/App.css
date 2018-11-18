@@ -38,11 +38,16 @@
     border-radius: 10px;
 }
 
+.load-form-label {
+    margin-top: 5px;
+    font-size: 1.2em;
+}
+
 .timer-container {
     position: absolute;
     right: 9%;
     top: 6%;
-    font-size: 2rem;
+    font-size: 3rem;
 }
 
 .question {

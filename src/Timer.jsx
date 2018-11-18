@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './timer.css'
 
 class Timer extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Timer extends Component {
         this.props.showRightAnswer();
       }
       if (this.state.timeDisplay === 0) {
-        if (this.questionNumber >= this.props.totalQuestions -1) {
+        if (this.questionNumber >= this.props.totalQuestions - 1) {
           this.props.getRankings();
           clearTimeout(timeOut);
         } else {
@@ -31,7 +32,9 @@ class Timer extends Component {
   render() {
     return (
       <div className={`timer-container`}>
-        <h1>{this.state.timeDisplay}</h1>
+        <div className="spinner spinner-1">
+          <span>{this.state.timeDisplay}</span>
+        </div>
       </div>
     );
   }

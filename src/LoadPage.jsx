@@ -13,8 +13,8 @@ const LoadPage = (props) => {
           <input type="text"/>
           <button>JOIN GAME</button>
         </form>
-        <div>
-          {props.error}
+        <div className="load-form-label">
+          {props.error || 'Enter you name here'}
         </div>
       </div>);
   }
