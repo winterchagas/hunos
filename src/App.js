@@ -147,9 +147,7 @@ class App extends Component {
   showRightAnswer() {
     this.setState(() => ({seeRightAnswer: true}));
   }
-
-  // todo barra do timer
-
+  
   render() {
     let app;
     if (this.state.isHost) {
