@@ -17,6 +17,27 @@
     /*color: black*/
 }
 
+.load-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.load-form {
+    height: 300px;
+}
+
+.load-form input {
+    margin-right: 10px;
+    border-radius: 2px;
+}
+
+.load-form button {
+    border-radius: 10px;
+}
+
 .timer-container {
     position: absolute;
     right: 9%;

@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';
 
 let loadPage;
 
@@ -7,7 +8,7 @@ const LoadPage = (props) => {
     loadPage = <h1>Waiting for other players..</h1>
   } else {
     loadPage =
-      (<div className={`load-container`}>
+      (<div className="load-form">
         <form onSubmit={props.submit}>
           <input type="text"/>
           <button>JOIN GAME</button>
@@ -17,7 +18,11 @@ const LoadPage = (props) => {
         </div>
       </div>);
   }
-  return loadPage;
+  return (
+    <div className={`load-container`}>
+      {loadPage}
+    </div>
+  );
 };
 
 export default LoadPage;

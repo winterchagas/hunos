@@ -16,6 +16,7 @@ const Ranking = (props) => {
           img = <img className="img" src={icons[index]} alt=""/>;
           name = <h1 className="name1">{item[0]}</h1>;
         } else {
+          img = <span className="img" />;
           name = <h2 className="name1">{item[0]}</h2>;
         }
         if (item[1] < 10) {

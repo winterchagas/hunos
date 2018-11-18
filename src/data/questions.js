@@ -5,8 +5,8 @@ export default [
     answers: [
       {letter: 'A', answer: 'Australian Aboriginals'},
       {letter: 'B', answer: 'Spanish Colonists'},
-      {letter: 'C', answer: 'Ancient Greeks'},
-      {letter: 'D', answer: 'Polynesians'}
+      {letter: 'C', answer: 'Polynesians'},
+      {letter: 'D', answer: 'Ancient Greeks'},
     ]
   },
   {
